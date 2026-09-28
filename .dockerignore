@@ -1,0 +1,10 @@
+node_modules
+.local
+.env
+.env.*
+!.env.example
+.git
+apps/web/dist
+demo
+work
+*.log

@@ -1,0 +1,29 @@
+# Dependencies and generated output
+node_modules/
+dist/
+build/
+coverage/
+.cache/
+.pnpm-store/
+*.tsbuildinfo
+
+# Local data and credentials
+.local/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Logs, editors, and operating-system metadata
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Scratch work
+work/
+tmp/

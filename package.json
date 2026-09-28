@@ -1,0 +1,46 @@
+{
+  "name": "tracelens",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n api,web \"pnpm dev:api\" \"pnpm dev:web\"",
+    "dev:api": "tsx watch --env-file-if-exists=.env apps/api/src/server.ts",
+    "dev:web": "vite --config apps/web/vite.config.ts",
+    "db:setup": "tsx --env-file-if-exists=.env apps/api/src/migrate.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit && vite build --config apps/web/vite.config.ts",
+    "preview:local": "tsx --env-file-if-exists=.env apps/api/src/local.ts",
+    "start": "tsx --env-file-if-exists=.env apps/api/src/server.ts",
+    "test": "tsx --test tests/*.test.ts",
+    "test:postgres": "tsx --env-file-if-exists=.env --test tests/postgres.integration.ts",
+    "rehearse": "tsx scripts/rehearse.ts"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.1",
+    "@opentelemetry/core": "^2.11.0",
+    "@opentelemetry/sdk-trace-base": "^2.11.0",
+    "@opentelemetry/sdk-trace-node": "^2.11.0",
+    "express": "^5.1.0",
+    "pg": "^8.16.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tsx": "^4.20.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "@types/express": "^5.0.0",
+    "@types/node": "^24.0.0",
+    "@types/pg": "^8.15.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "concurrently": "^9.2.0",
+    "typescript": "^5.9.0",
+    "vite": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "packageManager": "pnpm@11.19.0"
+}

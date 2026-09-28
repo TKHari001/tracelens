@@ -1,0 +1,31 @@
+name: Build and test
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: tracelens
+          POSTGRES_PASSWORD: ci_only
+          POSTGRES_DB: tracelens
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U tracelens -d tracelens"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm install --global pnpm@11.19.0
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm test
+      - run: pnpm db:setup
+        env:
+          DATABASE_URL: postgres://tracelens:ci_only@localhost:5432/tracelens
+      - run: pnpm test:postgres
+        env:
+          DATABASE_URL: postgres://tracelens:ci_only@localhost:5432/tracelens

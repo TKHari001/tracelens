@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>X-Ray Vision · Recorded demo backup</title><style>body{font:16px system-ui;background:#f3f6ef;color:#233c2b;max-width:1000px;margin:40px auto;padding:20px}h1{font-size:36px}article{background:white;border:1px solid #cfdbc4;border-radius:12px;padding:24px;margin:22px 0}small,p{line-height:1.7}strong{color:#814b20}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#eff4e9;padding:16px;font-size:12px}summary{cursor:pointer;padding:12px 0}.label{background:#ffe5ad;padding:14px;border-radius:8px}</style><h1>X-Ray Vision</h1><div class="label"><b>RECORDED BACKUP — NOT LIVE</b><br>Recorded evidence, not a live execution. Requests originated from the rehearsal CLI; no browser timing is recorded.</div><p>Captured 2026-09-25T12:56:26.460Z. All three automated rehearsals passed.</p><article><h2>healthy</h2><strong>The request completed successfully. Products were loaded using two database queries.</strong><p>HTTP 200 · 20 products · 2 database operations</p><p>Request client → API → backend → database</p><small>Trace 1cfe06969771f09ca94e96e69711a614<br>Browser timing: unavailable (CLI capture)</small><details><summary>Inspect recorded SQL and span evidence</summary><pre>POST /api/demo/cart · ok · 4.33 ms
+Span: 86e75caf594ed44d
+Parent: 8196b45c70587103</pre><pre>cart.load · ok · 4.13 ms
+Span: 4454b3373c058c42
+Parent: 86e75caf594ed44d</pre><pre>db.products · ok · 1.37 ms
+Span: 842997f83ac3e705
+Parent: 4454b3373c058c42
+SQL: SELECT id, name, price_cents, seller_id FROM demo.products ORDER BY id</pre><pre>db.sellersBatch · ok · 1.93 ms
+Span: cd9f46e695efa4c5
+Parent: 4454b3373c058c42
+SQL: SELECT id, name FROM demo.sellers WHERE id = ANY($1::int[]) ORDER BY id</pre></details></article><article><h2>hidden-error</h2><strong>Hidden failure: a database operation failed, but the API returned HTTP 200 with an empty cart.</strong><p>HTTP 200 · 0 products · 1 database operations</p><p>Request client → API → backend → database</p><small>Trace 6efa0989f4179a4569bff4b11a7b877b<br>Browser timing: unavailable (CLI capture)</small><details><summary>Inspect recorded SQL and span evidence</summary><pre>POST /api/demo/cart · ok · 1.76 ms
+Span: 34e8e2d9b761fc2c
+Parent: 069f44488ef669c9</pre><pre>cart.load · error · 1.69 ms
+Span: 728a61e29a87aebe
+Parent: 34e8e2d9b761fc2c</pre><pre>db.controlledFailure · error · 1.56 ms
+Span: 9a013ee410862c20
+Parent: 728a61e29a87aebe
+SQL: SELECT 1 / $1::integer AS demo_failure
+SQLSTATE: 22012</pre></details></article><article><h2>honest-error</h2><strong>Failure reported: the database operation failed and the API returned HTTP 503.</strong><p>HTTP 503 · No products · 1 database operations</p><p>Request client → API → backend → database</p><small>Trace 61dff5ce50ccf1b4eb18b2e417b8791c<br>Browser timing: unavailable (CLI capture)</small><details><summary>Inspect recorded SQL and span evidence</summary><pre>POST /api/demo/cart · error · 0.63 ms
+Span: 38d0cb646e8f528d
+Parent: be982d9df3c0aa1e</pre><pre>cart.load · error · 0.56 ms
+Span: 395912de8d7665b5
+Parent: 38d0cb646e8f528d</pre><pre>db.controlledFailure · error · 0.43 ms
+Span: b00e58082346183c
+Parent: 395912de8d7665b5
+SQL: SELECT 1 / $1::integer AS demo_failure
+SQLSTATE: 22012</pre></details></article><p>This file works without a server or network connection. These are real saved measurements from the local synthetic demo, not new execution results.</p></html>

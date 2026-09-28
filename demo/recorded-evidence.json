@@ -1,0 +1,179 @@
+{
+  "recordedAt": "2026-09-25T12:56:26.460Z",
+  "source": "Automated HTTP rehearsal against http://127.0.0.1:3001",
+  "live": false,
+  "notes": "Recorded evidence, not a live execution. Requests originated from the rehearsal CLI; no browser timing is recorded.",
+  "rounds": [
+    {
+      "round": 1,
+      "passed": true,
+      "scenarios": 3
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "scenarios": 3
+    },
+    {
+      "round": 3,
+      "passed": true,
+      "scenarios": 3
+    }
+  ],
+  "journeys": [
+    {
+      "id": "c1803d2d-2543-43e6-abc8-e13c0fc50c61",
+      "mode": "healthy",
+      "spans": [
+        {
+          "kind": "internal",
+          "spanId": "86e75caf594ed44d",
+          "status": "ok",
+          "startMs": 1790340986170,
+          "traceId": "1cfe06969771f09ca94e96e69711a614",
+          "operation": "POST /api/demo/cart",
+          "durationMs": 4.3269,
+          "parentSpanId": "8196b45c70587103"
+        },
+        {
+          "kind": "internal",
+          "spanId": "4454b3373c058c42",
+          "status": "ok",
+          "startMs": 1790340986170,
+          "traceId": "1cfe06969771f09ca94e96e69711a614",
+          "operation": "cart.load",
+          "durationMs": 4.1335,
+          "parentSpanId": "86e75caf594ed44d"
+        },
+        {
+          "kind": "database",
+          "spanId": "842997f83ac3e705",
+          "status": "ok",
+          "startMs": 1790340986170,
+          "traceId": "1cfe06969771f09ca94e96e69711a614",
+          "operation": "db.products",
+          "durationMs": 1.3651,
+          "parentSpanId": "4454b3373c058c42",
+          "queryTemplate": "SELECT id, name, price_cents, seller_id FROM demo.products ORDER BY id"
+        },
+        {
+          "kind": "database",
+          "spanId": "cd9f46e695efa4c5",
+          "status": "ok",
+          "startMs": 1790340986172,
+          "traceId": "1cfe06969771f09ca94e96e69711a614",
+          "operation": "db.sellersBatch",
+          "durationMs": 1.9289,
+          "parentSpanId": "4454b3373c058c42",
+          "queryTemplate": "SELECT id, name FROM demo.sellers WHERE id = ANY($1::int[]) ORDER BY id"
+        }
+      ],
+      "browser": null,
+      "dataset": "cart-v1",
+      "finding": "The request completed successfully. Products were loaded using two database queries.",
+      "traceId": "1cfe06969771f09ca94e96e69711a614",
+      "createdAt": "2026-09-25T12:56:26.175Z",
+      "httpStatus": 200,
+      "environment": "local-pglite",
+      "productCount": 20,
+      "browserSpanId": "8196b45c70587103",
+      "instrumentationVersion": "journey-v1"
+    },
+    {
+      "id": "5adff32a-56ef-4cb3-9e95-1e454398b301",
+      "mode": "hidden-error",
+      "spans": [
+        {
+          "kind": "internal",
+          "spanId": "34e8e2d9b761fc2c",
+          "status": "ok",
+          "startMs": 1790340986203,
+          "traceId": "6efa0989f4179a4569bff4b11a7b877b",
+          "operation": "POST /api/demo/cart",
+          "durationMs": 1.7642,
+          "parentSpanId": "069f44488ef669c9"
+        },
+        {
+          "kind": "internal",
+          "spanId": "728a61e29a87aebe",
+          "status": "error",
+          "startMs": 1790340986203,
+          "traceId": "6efa0989f4179a4569bff4b11a7b877b",
+          "operation": "cart.load",
+          "durationMs": 1.6878,
+          "parentSpanId": "34e8e2d9b761fc2c"
+        },
+        {
+          "kind": "database",
+          "spanId": "9a013ee410862c20",
+          "status": "error",
+          "startMs": 1790340986203,
+          "traceId": "6efa0989f4179a4569bff4b11a7b877b",
+          "errorCode": "22012",
+          "operation": "db.controlledFailure",
+          "durationMs": 1.5555,
+          "parentSpanId": "728a61e29a87aebe",
+          "queryTemplate": "SELECT 1 / $1::integer AS demo_failure"
+        }
+      ],
+      "browser": null,
+      "dataset": "cart-v1",
+      "finding": "Hidden failure: a database operation failed, but the API returned HTTP 200 with an empty cart.",
+      "traceId": "6efa0989f4179a4569bff4b11a7b877b",
+      "createdAt": "2026-09-25T12:56:26.205Z",
+      "httpStatus": 200,
+      "environment": "local-pglite",
+      "productCount": 0,
+      "browserSpanId": "069f44488ef669c9",
+      "instrumentationVersion": "journey-v1"
+    },
+    {
+      "id": "21b3d406-55ff-4081-ae32-683a0ed1dbc0",
+      "mode": "honest-error",
+      "spans": [
+        {
+          "kind": "internal",
+          "spanId": "38d0cb646e8f528d",
+          "status": "error",
+          "startMs": 1790340986229,
+          "traceId": "61dff5ce50ccf1b4eb18b2e417b8791c",
+          "operation": "POST /api/demo/cart",
+          "durationMs": 0.628,
+          "parentSpanId": "be982d9df3c0aa1e"
+        },
+        {
+          "kind": "internal",
+          "spanId": "395912de8d7665b5",
+          "status": "error",
+          "startMs": 1790340986229,
+          "traceId": "61dff5ce50ccf1b4eb18b2e417b8791c",
+          "operation": "cart.load",
+          "durationMs": 0.5594,
+          "parentSpanId": "38d0cb646e8f528d"
+        },
+        {
+          "kind": "database",
+          "spanId": "b00e58082346183c",
+          "status": "error",
+          "startMs": 1790340986229,
+          "traceId": "61dff5ce50ccf1b4eb18b2e417b8791c",
+          "errorCode": "22012",
+          "operation": "db.controlledFailure",
+          "durationMs": 0.4342,
+          "parentSpanId": "395912de8d7665b5",
+          "queryTemplate": "SELECT 1 / $1::integer AS demo_failure"
+        }
+      ],
+      "browser": null,
+      "dataset": "cart-v1",
+      "finding": "Failure reported: the database operation failed and the API returned HTTP 503.",
+      "traceId": "61dff5ce50ccf1b4eb18b2e417b8791c",
+      "createdAt": "2026-09-25T12:56:26.230Z",
+      "httpStatus": 503,
+      "environment": "local-pglite",
+      "productCount": null,
+      "browserSpanId": "be982d9df3c0aa1e",
+      "instrumentationVersion": "journey-v1"
+    }
+  ]
+}
